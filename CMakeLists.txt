@@ -114,9 +114,17 @@ set(OMPL_EXTENSION_TRIANGLE ${TRIANGLE_FOUND})
 set_package_properties(flann PROPERTIES
     URL "https://github.com/mariusmuja/flann"
     PURPOSE "If detetected, FLANN can be used for nearest neighbor queries by OMPL.")
-find_package(flann CONFIG 1.9.2 QUIET)
+find_package(FLANN REQUIRED 1.9.2 HINTS /usr/local/lib/cmake/flann/ /usr/local/lib)
 if (FLANN_FOUND)
+    message(WARNING "Setting OMPL_HAVE_FLANN to 1")
     set(OMPL_HAVE_FLANN 1)
+else ()
+    message(WARNING "Didnt find FLANN")
+endif()
+
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
 set_package_properties(spot PROPERTIES
